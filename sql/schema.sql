@@ -3,25 +3,29 @@ CREATE TABLE student26.hub_customer (
     customer_hash_key TEXT PRIMARY KEY,
     load_dts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     record_source TEXT DEFAULT 'SampleSuperstore.csv'
-);
+)
+DISTRIBUTED BY (customer_hash_key);
 
 CREATE TABLE student26.hub_product (
     product_hash_key TEXT PRIMARY KEY,
     load_dts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     record_source TEXT DEFAULT 'SampleSuperstore.csv'
-);
+)
+DISTRIBUTED BY (product_hash_key);
 
 CREATE TABLE student26.hub_location (
     location_hash_key TEXT PRIMARY KEY,
     load_dts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     record_source TEXT DEFAULT 'SampleSuperstore.csv'
-);
+)
+DISTRIBUTED BY (location_hash_key);
 
 CREATE TABLE student26.hub_order (
     order_hash_key TEXT PRIMARY KEY,
     load_dts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     record_source TEXT DEFAULT 'SampleSuperstore.csv'
-);
+)
+DISTRIBUTED BY (order_hash_key);
 
 -- Линки
 CREATE TABLE student26.link_order (
@@ -34,7 +38,8 @@ CREATE TABLE student26.link_order (
     FOREIGN KEY (customer_hash_key) REFERENCES hub_customer(customer_hash_key),
     FOREIGN KEY (product_hash_key) REFERENCES hub_product(product_hash_key),
     FOREIGN KEY (location_hash_key) REFERENCES hub_location(location_hash_key)
-);
+)
+DISTRIBUTED BY (order_hash_key);
 
 -- Спутники
 CREATE TABLE student26.sat_customer (
@@ -45,7 +50,8 @@ CREATE TABLE student26.sat_customer (
     record_source TEXT DEFAULT 'SampleSuperstore.csv',
     PRIMARY KEY (customer_hash_key, load_dts),
     FOREIGN KEY (customer_hash_key) REFERENCES hub_customer(customer_hash_key)
-);
+)
+DISTRIBUTED BY (order_hash_key);
 
 CREATE TABLE student26.sat_product (
     product_hash_key TEXT,
@@ -55,7 +61,8 @@ CREATE TABLE student26.sat_product (
     record_source TEXT DEFAULT 'SampleSuperstore.csv',
     PRIMARY KEY (product_hash_key, load_dts),
     FOREIGN KEY (product_hash_key) REFERENCES hub_product(product_hash_key)
-);
+)
+DISTRIBUTED BY (product_hash_key);
 
 CREATE TABLE student26.sat_location (
     location_hash_key TEXT,
@@ -67,7 +74,8 @@ CREATE TABLE student26.sat_location (
     record_source TEXT DEFAULT 'SampleSuperstore.csv',
     PRIMARY KEY (location_hash_key, load_dts),
     FOREIGN KEY (location_hash_key) REFERENCES hub_location(location_hash_key)
-);
+)
+DISTRIBUTED BY (location_hash_key);
 
 CREATE TABLE student26.sat_order (
     order_hash_key TEXT,
@@ -80,4 +88,5 @@ CREATE TABLE student26.sat_order (
     record_source TEXT DEFAULT 'SampleSuperstore.csv',
     PRIMARY KEY (order_hash_key, load_dts),
     FOREIGN KEY (order_hash_key) REFERENCES hub_order(order_hash_key)
-);
+)
+DISTRIBUTED BY (order_hash_key);
